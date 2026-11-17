@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Market - Produtos</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cloudflare.com">
+</head>
+<body>
+
+    <header class="cabecalho">
+        <div class="logo">
+            <h2>Map Market</h2>
+        </div>
+
+        <div class="barra-pesquisa">
+            <input type="text" id="pesquisaTopo" placeholder="Buscar produtos, marcas e muito mais...">
+            <button type="button" id="btnPesquisaTopo" aria-label="Pesquisar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
+        
+        <div class="menu-categorias">
+            <button type="button" class="btn-categorias" onclick="abrirCategorias()">
+                <i class="fa-solid fa-bars"></i> Categorias <i class="fa-solid fa-chevron-down"></i>
+            </button>
+
+            <div class="lista-categorias" id="listaCategorias">
+                <a href="#">Alimentos</a>
+                <a href="#">Bebidas</a>
+                <a href="#">Limpeza</a>
+                <a href="#">Higiene</a>
+                <a href="#">Hortifruti</a>
+                <a href="#">Congelados</a>
+            </div>
+        </div>
+
+        <nav class="menu-navegacao">
+            <a href="index.html">Início</a>
+            <a href="ajuda.html">Como usar</a>
+            <a href="mapa.html">Mapa</a>
+            <a href="feedback.html">Feedback</a>
+        </nav>
+    </header>
+
+    <div class="carousel">
+        <div class="slides">
+            <img src="aleatório ipa.jpg" alt="Divulgação">
+            <img src="Minhanossa.jpg" alt="Motivo para uso">
+            <img src="aleatório ipa.jpg" alt="Facilidade e agilidade">
+            <img src="download.jpg" alt="Como usar">
+            <img src="aleatório ipa.jpg" alt="Feedback">
+        </div>
+
+        <div class="busca">
+            <input type="text" id="pesquisa" placeholder="Ex: arroz, leite, aveia...">
+            <select id="setor">
+                <option value="Todos">Todos os setores</option>
+                <option value="Alimentos">Alimentos</option>
+                <option value="Bebidas">Bebidas</option>
+                <option value="Limpeza">Limpeza</option>
+                <option value="Higiene">Higiene</option>
+                <option value="Hortifruti">Hortifruti</option>
+                <option value="Congelados">Congelados</option>
+            </select>
+        </div>
+
+        <button type="button" class="prev" onclick="mudarSlide(-1)">❮</button>
+        <button type="button" class="next" onclick="mudarSlide(1)">❯</button>
+
+        <div class="indicadores">
+            <span onclick="irParaSlide(0)"></span>
+            <span onclick="irParaSlide(1)"></span>
+            <span onclick="irParaSlide(2)"></span>
+            <span onclick="irParaSlide(3)"></span>
+            <span onclick="irParaSlide(4)"></span>
+        </div>
+    </div>
+
+    <div id="produtos" class="produtos"></div>
+
+    <script>
+        const listaProdutos = [
+    // ALIMENTOS (Mercearia, Grãos, Massas, Molhos e Biscoitos)
+    { nome: "Arroz Branco Camil (1kg)", preco: "R$ 6,49", categoria: "Alimentos", corredor: "Corredor 1", estoque: true, imagem: "Arrozcamil.png" },
+    { nome: "Arroz Integral Tio João (1kg)", preco: "R$ 8,20", categoria: "Alimentos", corredor: "Corredor 1", estoque: true, imagem: "https://share.google/2YOVXbXP6HHdDxnJd" },
+    { nome: "Feijão Carioca Kicaldo (1kg)", preco: "R$ 7,99", categoria: "Alimentos", corredor: "Corredor 1", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Feijão Carioca Camil (1kg)", preco: "R$ 7,99", categoria: "Alimentos", corredor: "Corredor 1", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Feijão Fradinho Kicaldo (1kg)", preco: "R$ 12,40", categoria: "Alimentos", corredor: "Corredor 1", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Flocão de Milho Coringa (1kg)", preco: "R$ 3,89", categoria: "Alimentos", corredor: "Corredor 2", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Flocão de Milho Maratá (1kg)", preco: "R$ 3,75", categoria: "Alimentos", corredor: "Corredor 2", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Café Torrado e Moído Santa Clara (500g)", preco: "R$ 16,90", categoria: "Alimentos", corredor: "Corredor 2", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Açúcar Cristal União (1kg)", preco: "R$ 4,59", categoria: "Alimentos", corredor: "Corredor 2", estoque: false, imagem: "https://placeholder.com" },
+    { nome: "Macarrão Espaguete Vitarella (500g)", preco: "R$ 4,29", categoria: "Alimentos", corredor: "Corredor 3", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Macarrão Espaguete Camil (500g)", preco: "R$ 4,10", categoria: "Alimentos", corredor: "Corredor 3", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Macarrão Espaguete Pilar (500g)", preco: "R$ 3,99", categoria: "Alimentos", corredor: "Corredor 3", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Macarrão Parafuso Dona Benta (500g)", preco: "R$ 4,79", categoria: "Alimentos", corredor: "Corredor 3", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Macarrão Espaguete Barilla Nº 5 (500g)", preco: "R$ 9,49", categoria: "Alimentos", corredor: "Corredor 3", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Molho de Tomate Tradicional Quero (300g)", preco: "R$ 2,39", categoria: "Alimentos", corredor: "Corredor 3", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Molho de Tomate Bonare (300g)", preco: "R$ 1,99", categoria: "Alimentos", corredor: "Corredor 3", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Molho de Tomate Maratá (300g)", preco: "R$ 2,15", categoria: "Alimentos", corredor: "Corredor 3", estoque: false, imagem: "https://placeholder.com" },
+    { nome: "Biscoito Recheado Treloso Chocolate (130g)", preco: "R$ 2,89", categoria: "Alimentos", corredor: "Corredor 4", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Biscoito Recheado Treloso Brigadeiro (130g)", preco: "R$ 2,89", categoria: "Alimentos", corredor: "Corredor 4", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Biscoito Recheado Treloso Morango (130g)", preco: "R$ 2,89", categoria: "Alimentos", corredor: "Corredor 4", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Biscoito Recheado Treloso Doce de Leite (130g)", preco: "R$ 2,89", categoria: "Alimentos", corredor: "Corredor 4", estoque: false, imagem: "https://placeholder.com" },
+    { nome: "Biscoito Recheado Treloso Flocos (130g)", preco: "R$ 2,89", categoria: "Alimentos", corredor: "Corredor 4", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Biscoito Recheado Futurinhos Chocolate (130g)", preco: "R$ 2,75", categoria: "Alimentos", corredor: "Corredor 4", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Biscoito Recheado Futurinhos Morango (130g)", preco: "R$ 2,75", categoria: "Alimentos", corredor: "Corredor 4", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Biscoito Recheado Futurinhos Black (130g)", preco: "R$ 2,99", categoria: "Alimentos", corredor: "Corredor 4", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Rosquinhas Mabel Leite (350g)", preco: "R$ 5,49", categoria: "Alimentos", corredor: "Corredor 4", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Rosquinhas Mabel Coco (350g)", preco: "R$ 5,49", categoria: "Alimentos", corredor: "Corredor 4", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Rosquinhas Mabel Mel e Banana (350g)", preco: "R$ 5,79", categoria: "Alimentos", corredor: "Corredor 4", estoque: false, imagem: "https://placeholder.com" },
+
+    // BEBIDAS
+    { nome: "Leite Integral Betânia (1L)", preco: "R$ 4,89", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Refrigerante Coca-Cola (2L)", preco: "R$ 9,99", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Refrigerante Guaraná Antarctica (2L)", preco: "R$ 8,49", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Suco Integral Uva Aurora (1,5L)", preco: "R$ 15,90", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Água Mineral Indaiá sem Gás (1,5L)", preco: "R$ 2,49", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Refrigerante Coca-Cola Original (2L)", preco: "R$ 9,99", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Refrigerante Coca-Cola Sem Açúcar (2L)", preco: "R$ 9,79", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Refrigerante Guaraná Antarctica (2L)", preco: "R$ 8,49", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Refrigerante Fanta Laranja (2L)", preco: "R$ 8,29", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Refrigerante Sprite Limão (2L)", preco: "R$ 8,29", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Refrigerante Pepsi Black (2L)", preco: "R$ 7,99", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Leite Integral Betânia (1L)", preco: "R$ 4,89", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Leite Desnatado Piracanjuba (1L)", preco: "R$ 5,19", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Leite Zero Lactose Italac (1L)", preco: "R$ 5,89", categoria: "Bebidas", corredor: "Corredor 5", estoque: false, imagem: "https://placeholder.com" },
+    { nome: "Achocolatado Toddynho (200ml)", preco: "R$ 2,69", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Achocolatado Nescau Prontinho (200ml)", preco: "R$ 2,79", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Suco Integral Uva Aurora (1,5L)", preco: "R$ 15,90", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Suco Néctar Del Valle Laranja (1L)", preco: "R$ 6,49", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Suco Néctar Del Valle Caju (1L)", preco: "R$ 6,29", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Suco em Pó Tang Laranja (18g)", preco: "R$ 1,29", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Água Mineral Indaiá sem Gás (1,5L)", preco: "R$ 2,49", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Água Mineral Crystal com Gás (500ml)", preco: "R$ 2,19", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Água de Coco Kero Coco (1L)", preco: "R$ 8,90", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Energético Red Bull Tradicional (250ml)", preco: "R$ 8,99", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Energético Monster Energy (473ml)", preco: "R$ 9,49", categoria: "Bebidas", corredor: "Corredor 5", estoque: false, imagem: "placeholder.com" },
+    { nome: "Isotônico Gatorade Limão (500ml)", preco: "R$ 4,99", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "placeholder.com" },
+    { nome: "Chá Gelado Matte Leão Pêssego (1,5L)", preco: "R$ 6,89", categoria: "Bebidas", corredor: "Corredor 5", estoque: true, imagem: "placeholder.com" },
+// =========================================
+// FRIOS (20 itens)
+// =========================================
+{ nome: "Queijo Mussarela Fatiado Sadia (200g)", preco: "R$ 11,90", categoria: "Frios", corredor: "Geladeira Frios", estoque: true, imagem: "placeholder.com" },
+{ nome: "Queijo Mussarela Fatiado Perdigão (200g)", preco: "R$ 11,50", categoria: "Frios", corredor: "Geladeira Frios", estoque: true, imagem: "placeholder.com" },
+{ nome: "Presunto Cozido Fatiado Sadia (200g)", preco: "R$ 8,90", categoria: "Frios", corredor: "Geladeira Frios", estoque: true, imagem: "placeholder.com" },
+{ nome: "Presunto Cozido Seara (200g)", preco: "R$ 8,49", categoria: "Frios", corredor: "Geladeira Frios", estoque: true, imagem: "placeholder.com" },
+{ nome: "Peito de Peru Defumado Sadia (200g)", preco: "R$ 13,90", categoria: "Frios", corredor: "Geladeira Frios", estoque: true, imagem: "placeholder.com" },
+{ nome: "Mortadela Defumada Ouro Perdigão (200g)", preco: "R$ 6,49", categoria: "Frios", corredor: "Geladeira Frios", estoque: true, imagem: "placeholder.com" },
+{ nome: "Salame Tipo Italiano Sadia (100g)", preco: "R$ 12,50", categoria: "Frios", corredor: "Geladeira Frios", estoque: false, imagem: "placeholder.com" },
+{ nome: "Queijo Prato Fatiado Tirolez (150g)", preco: "R$ 10,80", categoria: "Frios", corredor: "Geladeira Frios", estoque: true, imagem: "placeholder.com" },
+{ nome: "Queijo Coalho Espeto Betânia (400g)", preco: "R$ 17,90", categoria: "Frios", corredor: "Geladeira Frios", estoque: true, imagem: "placeholder.com" },
+{ nome: "Queijo Minas Frescal Tirolez (350g)", preco: "R$ 15,40", categoria: "Frios", corredor: "Geladeira Frios", estoque: true, imagem: "placeholder.com" },
+{ nome: "Requeijão Cremoso Vigor Tradicional (200g)", preco: "R$ 7,99", categoria: "Frios", corredor: "Geladeira Frios", estoque: true, imagem: "placeholder.com" },
+{ nome: "Requeijão Cremoso Crioulo (200g)", preco: "R$ 6,89", categoria: "Frios", corredor: "Geladeira Frios", estoque: true, imagem: "placeholder.com" },
+{ nome: "Manteiga com Sal Betânia (200g)", preco: "R$ 10,49", categoria: "Frios", corredor: "Geladeira Frios", estoque: true, imagem: "placeholder.com" },
+{ nome: "Margarina Qualy Cremosa com Sal (500g)", preco: "R$ 8,29", categoria: "Frios", corredor: "Geladeira Frios", estoque: true, imagem: "placeholder.com" },
+{ nome: "Margarina Delícia Supreme (500g)", preco: "R$ 6,99", categoria: "Frios", corredor: "Geladeira Frios", estoque: true, imagem: "placeholder.com" },
+{ nome: "Iogurte Grego Vigor Tradicional (90g)", preco: "R$ 3,99", categoria: "Frios", corredor: "Geladeira Frios", estoque: true, imagem: "placeholder.com" },
+{ nome: "Iogurte Polpa Morango Danone (540g)", preco: "R$ 7,49", categoria: "Frios", corredor: "Geladeira Frios", estoque: true, imagem: "placeholder.com" },
+{ nome: "Leite Fermentado Yakult (6 unidades)", preco: "R$ 9,90", categoria: "Frios", corredor: "Geladeira Frios", estoque: false, imagem: "placeholder.com" },
+{ nome: "Cream Cheese Philadelphia Original (150g)", preco: "R$ 9,79", categoria: "Frios", corredor: "Geladeira Frios", estoque: true, imagem: "placeholder.com" },
+{ nome: "Linguiça Calabresa Defumada Perdigão (400g)", preco: "R$ 12,90", categoria: "Frios", corredor: "Geladeira Frios", estoque: true, imagem: "placeholder.com" },
+// =========================================
+// HIGIENE (22 itens)
+// =========================================
+{ nome: "Papel Higiênico Neve Folha Dupla (12 rolos)", preco: "R$ 21,90", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "placeholder.com" },
+{ nome: "Papel Higiênico Personal Vip (12 rolos)", preco: "R$ 18,50", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "placeholder.com" },
+{ nome: "Papel Higiênico Dualette Folha Dupla (12 rolos)", preco: "R$ 16,90", categoria: "Higiene", corredor: "Corredor 6", estoque: false, imagem: "placeholder.com" },
+{ nome: "Sabonete em Barra Dove Original (90g)", preco: "R$ 4,39", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "placeholder.com" },
+{ nome: "Sabonete em Barra Protex Limpeza Profunda (85g)", preco: "R$ 3,49", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "placeholder.com" },
+{ nome: "Sabonete em Barra Lux Buquê de Jasmim (85g)", preco: "R$ 2,69", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "placeholder.com" },
+{ nome: "Sabonete Líquido Granado Bebê (250ml)", preco: "R$ 16,90", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "placeholder.com" },
+{ nome: "Creme Dental Colgate Total 12 (90g)", preco: "R$ 6,90", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "placeholder.com" },
+{ nome: "Creme Dental Oral-B 123 Menta (70g)", preco: "R$ 3,79", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "placeholder.com" },
+{ nome: "Creme Dental Sensodyne Rápido Alívio (90g)", preco: "R$ 18,90", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "placeholder.com" },
+{ nome: "Enxaguante Bucal Listerine Cool Mint (500ml)", preco: "R$ 19,50", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "placeholder.com" },
+{ nome: "Escova Dental Colgate Slim Soft (2 unid.)", preco: "R$ 14,90", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "placeholder.com" },
+{ nome: "Fio Dental Johnson's Reach Essencial (100m)", preco: "R$ 11,40", categoria: "Higiene", corredor: "Corredor 6", estoque: false, imagem: "placeholder.com" },
+{ nome: "Shampoo Pantene Restauração (400ml)", preco: "R$ 19,90", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "placeholder.com" },
+{ nome: "Condicionador Pantene Restauração (400ml)", preco: "R$ 21,90", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "placeholder.com" },
+{ nome: "Shampoo Seda Ceramidas (325ml)", preco: "R$ 11,90", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "placeholder.com" },
+{ nome: "Shampoo Anticaspa Clear Men (200ml)", preco: "R$ 16,49", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "placeholder.com" },
+{ nome: "Desodorante Aerosol Rexona Invisible (150ml)", preco: "R$ 14,90", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "placeholder.com" },
+{ nome: "Desodorante Aerosol Dove Original (150ml)", preco: "R$ 15,50", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "placeholder.com" },
+{ nome: "Absorvente Sempre Livre Adapt Suave (16 unid.)", preco: "R$ 8,90", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "placeholder.com" },
+{ nome: "Aparelho de Barbear Gillette Prestobarba 3", preco: "R$ 12,90", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "placeholder.com" },
+{ nome: "Hidratante Corporal Nivea Milk (200ml)", preco: "R$ 15,90", categoria: "Higiene", corredor: "Corredor 6", estoque: false, imagem: "placeholder.com" },
+// =========================================
+// LIMPEZA (20 itens)
+// =========================================
+{ nome: "Detergente Líquido Ypê Neutro (500ml)", preco: "R$ 2,49", categoria: "Limpeza", corredor: "Corredor 7", estoque: true, imagem: "placeholder.com" },
+{ nome: "Detergente Líquido Limpol Cristal (500ml)", preco: "R$ 2,39", categoria: "Limpeza", corredor: "Corredor 7", estoque: true, imagem: "placeholder.com" },
+{ nome: "Sabão em Pó OMO Lavagem Perfeita (1,6kg)", preco: "R$ 24,90", categoria: "Limpeza", corredor: "Corredor 7", estoque: true, imagem: "placeholder.com" },
+{ nome: "Sabão em Pó Brilhante Limpeza Total (1,6kg)", preco: "R$ 18,90", categoria: "Limpeza", corredor: "Corredor 7", estoque: true, imagem: "placeholder.com" },
+{ nome: "Sabão Líquido Ariel Concentrado (1,2L)", preco: "R$ 26,90", categoria: "Limpeza", corredor: "Corredor 7", estoque: true, imagem: "placeholder.com" },
+{ nome: "Sabão em Barra Ypê Glicerinado (5 unid.)", preco: "R$ 11,50", categoria: "Limpeza", corredor: "Corredor 7", estoque: true, imagem: "placeholder.com" },
+{ nome: "Amaciante Concentrado Downy Brisa (500ml)", preco: "R$ 13,50", categoria: "Limpeza", corredor: "Corredor 7", estoque: true, imagem: "placeholder.com" },
+{ nome: "Amaciante Comfort Puro Cuidado (1,8L)", preco: "R$ 16,90", categoria: "Limpeza", corredor: "Corredor 7", estoque: true, imagem: "placeholder.com" },
+{ nome: "Água Sanitária Dragão (1L)", preco: "R$ 3,69", categoria: "Limpeza", corredor: "Corredor 7", estoque: true, imagem: "placeholder.com" },
+{ nome: "Água Sanitária Qboa (2L)", preco: "R$ 6,49", categoria: "Limpeza", corredor: "Corredor 7", estoque: true, imagem: "placeholder.com" },
+{ nome: "Desinfetante Pinho Sol Lavanda (1L)", preco: "R$ 8,90", categoria: "Limpeza", corredor: "Corredor 7", estoque: false, imagem: "placeholder.com" },
+{ nome: "Desinfetante Veja Perfume da Natureza (2L)", preco: "R$ 11,90", categoria: "Limpeza", corredor: "Corredor 7", estoque: true, imagem: "placeholder.com" },
+{ nome: "Limpador Multiuso Veja Original (500ml)", preco: "R$ 5,49", categoria: "Limpeza", corredor: "Corredor 7", estoque: true, imagem: "placeholder.com" },
+{ nome: "Esponja de Louça Scotch-Brite (4 unid.)", preco: "R$ 6,29", categoria: "Limpeza", corredor: "Corredor 7", estoque: true, imagem: "placeholder.com" },
+{ nome: "Lã de Aço Bombril (8 unidades)", preco: "R$ 3,19", categoria: "Limpeza", corredor: "Corredor 7", estoque: true, imagem: "placeholder.com" },
+{ nome: "Saco para Lixo Dover Roll 50L (30 unid.)", preco: "R$ 12,90", categoria: "Limpeza", corredor: "Corredor 7", estoque: true, imagem: "placeholder.com" },
+{ nome: "Papel Toalha Snob Folha Dupla (2 rolos)", preco: "R$ 6,49", categoria: "Limpeza", corredor: "Corredor 7", estoque: true, imagem: "placeholder.com" },
+{ nome: "Inseticida SBP Aerossol Multi Insetos (380ml)", preco: "R$ 14,50", categoria: "Limpeza", corredor: "Corredor 7", estoque: true, imagem: "placeholder.com" },
+{ nome: "Tira Manchas Vanish Poder O2 (450g)", preco: "R$ 19,90", categoria: "Limpeza", corredor: "Corredor 7", estoque: false, imagem: "placeholder.com" },
+{ nome: "Limpa Vidros Vidrex Tradicional (500ml)", preco: "R$ 7,90", categoria: "Limpeza", corredor: "Corredor 7", estoque: true, imagem: "placeholder.com" },
+// =========================================
+// HORTIFRUTI (20 itens)
+// =========================================
+{ nome: "Banana Prata Selecionada (kg)", preco: "R$ 6,99", categoria: "Hortifruti", corredor: "Setor Verde", estoque: true, imagem: "placeholder.com" },
+{ nome: "Banana Pacovan Madura (kg)", preco: "R$ 7,49", categoria: "Hortifruti", corredor: "Setor Verde", estoque: true, imagem: "placeholder.com" },
+{ nome: "Tomate Italiano Maduro (kg)", preco: "R$ 7,49", categoria: "Hortifruti", corredor: "Setor Verde", estoque: true, imagem: "placeholder.com" },
+{ nome: "Batata Inglesa Lavada (kg)", preco: "R$ 5,89", categoria: "Hortifruti", corredor: "Setor Verde", estoque: true, imagem: "placeholder.com" },
+{ nome: "Cebola Branca Nacional (kg)", preco: "R$ 6,29", categoria: "Hortifruti", corredor: "Setor Verde", estoque: true, imagem: "placeholder.com" },
+{ nome: "Alho Roxo Granel (200g)", preco: "R$ 5,90", categoria: "Hortifruti", corredor: "Setor Verde", estoque: true, imagem: "placeholder.com" },
+{ nome: "Cenoura Selecionada (kg)", preco: "R$ 4,99", categoria: "Hortifruti", corredor: "Setor Verde", estoque: true, imagem: "placeholder.com" },
+{ nome: "Maçã Gala Nacional (kg)", preco: "R$ 11,90", categoria: "Hortifruti", corredor: "Setor Verde", estoque: false, imagem: "placeholder.com" },
+{ nome: "Maçã Fuji Importada (kg)", preco: "R$ 13,50", categoria: "Hortifruti", corredor: "Setor Verde", estoque: true, imagem: "placeholder.com" },
+{ nome: "Laranja Pera Rio (kg)", preco: "R$ 4,49", categoria: "Hortifruti", corredor: "Setor Verde", estoque: true, imagem: "placeholder.com" },
+{ nome: "Limão Tahiti Fresco (kg)", preco: "R$ 3,99", categoria: "Hortifruti", corredor: "Setor Verde", estoque: true, imagem: "placeholder.com" },
+{ nome: "Mamão Formosa (kg)", preco: "R$ 5,49", categoria: "Hortifruti", corredor: "Setor Verde", estoque: true, imagem: "placeholder.com" },
+{ nome: "Melancia Inteira (kg)", preco: "R$ 2,99", categoria: "Hortifruti", corredor: "Setor Verde", estoque: true, imagem: "placeholder.com" },
+{ nome: "Abacaxi Pérola Unidade", preco: "R$ 7,90", categoria: "Hortifruti", corredor: "Setor Verde", estoque: true, imagem: "placeholder.com" },
+{ nome: "Manga Tommy Atkins (kg)", preco: "R$ 5,79", categoria: "Hortifruti", corredor: "Setor Verde", estoque: true, imagem: "placeholder.com" },
+{ nome: "Uva Vitória sem Semente (500g)", preco: "R$ 8,90", categoria: "Hortifruti", corredor: "Setor Verde", estoque: true, imagem: "placeholder.com" },
+{ nome: "Alface Crespa Higienizada (unidade)", preco: "R$ 3,49", categoria: "Hortifruti", corredor: "Setor Verde", estoque: true, imagem: "placeholder.com" },
+{ nome: "Coentro e Cebolinha Maço", preco: "R$ 2,50", categoria: "Hortifruti", corredor: "Setor Verde", estoque: true, imagem: "placeholder.com" },
+{ nome: "Pimentão Verde Selecionado (kg)", preco: "R$ 6,49", categoria: "Hortifruti", corredor: "Setor Verde", estoque: false, imagem: "placeholder.com" },
+{ nome: "Ovos Brancos Grandes (cartela 20 unid.)", preco: "R$ 14,90", categoria: "Hortifruti", corredor: "Setor Verde", estoque: true, imagem: "placeholder.com" },
+// =========================================
+// CONGELADOS (20 itens)
+// =========================================
+{ nome: "Lasanha à Bolonhesa Sadia (600g)", preco: "R$ 16,90", categoria: "Congelados", corredor: "Freezer 1", estoque: true, imagem: "placeholder.com" },
+{ nome: "Lasanha Quatro Queijos Perdigão (600g)", preco: "R$ 16,50", categoria: "Congelados", corredor: "Freezer 1", estoque: true, imagem: "placeholder.com" },
+{ nome: "Nuggets de Frango Tradicional Perdigão (300g)", preco: "R$ 10,90", categoria: "Congelados", corredor: "Freezer 1", estoque: true, imagem: "placeholder.com" },
+{ nome: "Tekitos de Frango Seara (300g)", preco: "R$ 10,49", categoria: "Congelados", corredor: "Freezer 1", estoque: true, imagem: "placeholder.com" },
+{ nome: "Pão de Queijo Tradicional Forno de Minas (400g)", preco: "R$ 14,50", categoria: "Congelados", corredor: "Freezer 2", estoque: true, imagem: "placeholder.com" },
+{ nome: "Pizza Congelada Calabresa Seara (460g)", preco: "R$ 18,90", categoria: "Congelados", corredor: "Freezer 2", estoque: false, imagem: "placeholder.com" },
+{ nome: "Pizza Congelada Mussarela Sadia (460g)", preco: "R$ 18,50", categoria: "Congelados", corredor: "Freezer 2", estoque: true, imagem: "placeholder.com" },
+{ nome: "Batata Palito Pré-Frita Bem Brasil (1,05kg)", preco: "R$ 19,90", categoria: "Congelados", corredor: "Freezer 2", estoque: true, imagem: "placeholder.com" },
+{ nome: "Batata Palito McCain Tradicional (720g)", preco: "R$ 16,90", categoria: "Congelados", corredor: "Freezer 2", estoque: true, imagem: "placeholder.com" },
+{ nome: "Hambúrguer Bovino Texas Burger Seara (672g)", preco: "R$ 17,90", categoria: "Congelados", corredor: "Freezer 1", estoque: true, imagem: "placeholder.com" },
+{ nome: "Hambúrguer de Frango Sadia (672g)", preco: "R$ 16,49", categoria: "Congelados", corredor: "Freezer 1", estoque: true, imagem: "placeholder.com" },
+{ nome: "Filé de Peito de Frango Sadia (1kg)", preco: "R$ 21,90", categoria: "Congelados", corredor: "Freezer 1", estoque: true, imagem: "placeholder.com" },
+{ nome: "Coxinha da Asa Congelada Perdigão (1kg)", preco: "R$ 15,90", categoria: "Congelados", corredor: "Freezer 1", estoque: true, imagem: "placeholder.com" },
+{ nome: "Filé de Tilápia Congelado Copacol (400g)", preco: "R$ 22,90", categoria: "Congelados", corredor: "Freezer 3", estoque: true, imagem: "placeholder.com" },
+{ nome: "Brócolis Congelado Grano (300g)", preco: "R$ 8,49", categoria: "Congelados", corredor: "Freezer 3", estoque: true, imagem: "placeholder.com" },
+{ nome: "Seleta de Legumes Congelada Bonduelle (300g)", preco: "R$ 7,90", categoria: "Congelados", corredor: "Freezer 3", estoque: true, imagem: "placeholder.com" },
+{ nome: "Polpa de Fruta Acerola Mais Fruta (400g)", preco: "R$ 6,90", categoria: "Congelados", corredor: "Freezer 3", estoque: true, imagem: "placeholder.com" },
+
+
+
+
+    // HIGIENE
+    { nome: "Papel Higiênico Neve Folha Dupla (12 rolos)", preco: "R$ 21,90", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Papel Higiênico Personal Vip (12 rolos)", preco: "R$ 18,50", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Papel Higiênico Dualette Folha Dupla (12 rolos)", preco: "R$ 16,90", categoria: "Higiene", corredor: "Corredor 6", estoque: false, imagem: "https://placeholder.com" },
+    { nome: "Sabonete em Barra Dove Original (90g)", preco: "R$ 4,39", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Creme Dental Colgate Total 12 (90g)", preco: "R$ 6,90", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Shampoo Pantene Restauração (400ml)", preco: "R$ 19,90", categoria: "Higiene", corredor: "Corredor 6", estoque: true, imagem: "https://placeholder.com" },
+
+    // LIMPEZA
+    { nome: "Detergente Líquido Ypê Neutro (500ml)", preco: "R$ 2,49", categoria: "Limpeza", corredor: "Corredor 7", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Sabão em Pó OMO Lavagem Perfeita (1,6kg)", preco: "R$ 24,90", categoria: "Limpeza", corredor: "Corredor 7", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Água Sanitária Dragão (1L)", preco: "R$ 3,69", categoria: "Limpeza", corredor: "Corredor 7", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Desinfetante Pinho Sol Lavanda (1L)", preco: "R$ 8,90", categoria: "Limpeza", corredor: "Corredor 7", estoque: false, imagem: "https://placeholder.com" },
+    { nome: "Amaciante Concentrado Downy Brisa (500ml)", preco: "R$ 13,50", categoria: "Limpeza", corredor: "Corredor 7", estoque: true, imagem: "https://placeholder.com" },
+
+    // HORTIFRUTI
+    { nome: "Banana Prata Selecionada (kg)", preco: "R$ 6,99", categoria: "Hortifruti", corredor: "Setor Verde", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Tomate Italiano Maduro (kg)", preco: "R$ 7,49", categoria: "Hortifruti", corredor: "Setor Verde", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Batata Inglesa Lavada (kg)", preco: "R$ 5,89", categoria: "Hortifruti", corredor: "Setor Verde", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Maçã Gala Nacional (kg)", preco: "R$ 11,90", categoria: "Hortifruti", corredor: "Setor Verde", estoque: false, imagem: "https://placeholder.com" },
+
+    // CONGELADOS
+    { nome: "Lasanha à Bolonhesa Sadia (600g)", preco: "R$ 16,90", categoria: "Congelados", corredor: "Freezer 1", estoque: true, imagem: "https://placeholder.com" },
+    { nome: "Nuggets de Frango Tradicional Perdigão (300g)", preco: "R$ 10,90", categoria: "Congelados", corredor: "Freezer 1", estoque: true, imagem: "https://placeholder.com" },
+
+    
+        ];
+
+        function normalizarTexto(texto) {
+            return texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+
+        function renderizarProdutos() {
+            const container = document.getElementById("produtos");
+            const termoBusca = normalizarTexto(document.getElementById("pesquisa").value.trim());
+            const setorSelecionado = document.getElementById("setor").value;
+            container.innerHTML = "";
+
+            const filtrados = listaProdutos.filter(p =>
+                normalizarTexto(p.nome).includes(termoBusca) &&
+                (setorSelecionado === "Todos" || p.categoria === setorSelecionado)
+            );
+
+            if (filtrados.length === 0) {
+                container.innerHTML = '<p class="sem-resultados">Nenhum produto encontrado.</p>';
+                return;
+            }
+
+            const categorias = [...new Set(filtrados.map(p => p.categoria))];
+
+            categorias.forEach(cat => {
+                const itens = filtrados.filter(p => p.categoria === cat);
+                const secao = document.createElement("section");
+                secao.className = "secao-categoria";
+                secao.id = "cat-" + normalizarTexto(cat);
+
+                secao.innerHTML = `
+                    <div class="titulo-categoria">
+                        <h2>${cat}</h2>
+                        <span>${itens.length} itens</span>
+                    </div>
+                    <div class="fileira-produtos">
+                        ${itens.map(p => `
+                            <div class="card-produto">
+                                <span class="badge-estoque ${p.estoque ? 'disponivel' : 'esgotado'}">
+                                    ${p.estoque ? '● Em estoque' : '● Indisponível'}
+                                </span>
+                                <img src="${p.imagem}" alt="${p.nome}">
+                                <div class="info-produto">
+                                    <span class="corredor-tag">${p.corredor}</span>
+                                    <h3>${p.nome}</h3>
+                                    <p class="preco">${p.preco}</p>
+                                </div>
+                            </div>
+                        `).join("")}
+                    </div>
+                `;
+                container.appendChild(secao);
+            });
+        }
+
+        const inputTopo = document.getElementById("pesquisaTopo");
+        const botaoTopo = document.getElementById("btnPesquisaTopo");
+        inputTopo.addEventListener("input", function() {
+        document.getElementById("pesquisa").value = inputTopo.value.trim();
+        document.getElementById("setor").value = "Todos";
+        renderizarProdutos();
+        });
+
+
+        function executarBuscaTopo() {
+            document.getElementById("pesquisa").value = inputTopo.value.trim();
+            document.getElementById("setor").value = "Todos";
+            renderizarProdutos();
+            document.getElementById("produtos").scrollIntoView({ behavior: "smooth" });
+        }
+
+        botaoTopo.addEventListener("click", executarBuscaTopo);
+        inputTopo.addEventListener("keypress", e => { if (e.key === "Enter") { e.preventDefault(); executarBuscaTopo(); } });
+        
+        document.getElementById("pesquisa").addEventListener("input", renderizarProdutos);
+        document.getElementById("setor").addEventListener("change", renderizarProdutos);
+
+        document.querySelectorAll("#listaCategorias a").forEach(link => {
+            link.addEventListener("click", e => {
+                e.preventDefault();
+                document.getElementById("setor").value = "Todos";
+                document.getElementById("pesquisa").value = "";
+                inputTopo.value = "";
+                renderizarProdutos();
+                document.getElementById("listaCategorias").classList.remove("ativo");
+
+                const alvo = document.getElementById("cat-" + normalizarTexto(link.textContent.trim()));
+                if (alvo) alvo.scrollIntoView({ behavior: "smooth" });
+            });
+        });
+
+        renderizarProdutos();
+
+        let slideAtual = 0;
+        const slides = document.querySelector(".slides");
+        const imagens = document.querySelectorAll(".slides img");
+        const indicadores = document.querySelectorAll(".indicadores span");
+
+        function atualizarSlide() {
+            slides.style.transform = `translateX(-${slideAtual * 100}%)`;
+            indicadores.forEach((b, i) => b.classList.toggle("ativo", i === slideAtual));
+        }
+
+        function mudarSlide(dir) {
+            slideAtual = (slideAtual + dir + imagens.length) % imagens.length;
+            atualizarSlide();
+        }
+
+        function irParaSlide(i) {
+            slideAtual = i;
+            atualizarSlide();
+        }
+
+        setInterval(() => mudarSlide(1), 4000);
+        atualizarSlide();
+
+        function abrirCategorias() {
+            document.getElementById("listaCategorias").classList.toggle("ativo");
+        }
+    </script>
+</body>
+</html>
